@@ -1,0 +1,8 @@
+django
+djangorestframework
+djangorestframework_simplejwt
+django-cors-headers
+environs
+huey==2.4.5
+redis==4.6.0
+openai

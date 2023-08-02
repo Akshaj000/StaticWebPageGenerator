@@ -15,9 +15,8 @@ The webapp can generated static website using HTML, CSS and JS using user specif
 
 The app is not production ready, might find it hard to run locally aswell. Also there will console.log and localhost here and there. I will fix it in few days.
 
-
-![Screenshot from 2023-08-02 18-27-16](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/11cce80b-2249-47ab-bbf2-2e3c13cb2e9c)
-![Screenshot from 2023-08-02 18-25-49](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/04c75ce1-0920-407e-a343-9eb2389d20ae)
-![Screenshot from 2023-08-02 18-26-18](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/94b26433-9966-4be9-a132-720765a6cee6)
-![Screenshot from 2023-08-02 18-26-33](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/3204c1e8-3070-4468-9c4c-7d6a03a9537a)
-![Screenshot from 2023-08-02 18-27-42](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/1d3e107a-7dbc-41a0-8e99-7377ac70a322)
+![Screenshot from 2023-08-02 18-27-16](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/e0d3a246-6c75-4d02-9daa-d8de643c466f)
+![Screenshot from 2023-08-02 18-26-33](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/312b6141-c953-43e7-ae35-0ed732d0b906)
+![Screenshot from 2023-08-02 18-25-49](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/dd1b345b-6e18-4d47-89df-dc9ea0ba8c2a)
+![Screenshot from 2023-08-02 18-26-18](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/7dfadba0-3bc8-494f-9129-0fa105355091)
+![Screenshot from 2023-08-02 18-27-42](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/eea4f6ce-4fdf-4277-b9cc-7c96374b47c1)

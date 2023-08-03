@@ -1,7 +1,7 @@
 # Static Web Page Generator
 
 
-The webapp can generate static website using HTML, CSS and JS using user specifications. It uses django with apis from github and openAI in the backend and Next.js in the frontend. The website is capable of handling multiple users and sessions. Each session contain one website.
+The webapp can generate static website using HTML, CSS and JS based on user specifications. It uses django with apis from github and openAI in the backend and Next.js in the frontend. The website is capable of handling multiple users and sessions. Each session contain one website.
 
 0) User add their github username, github token and openAI key in the user settings.
 1) User creates a new session. 

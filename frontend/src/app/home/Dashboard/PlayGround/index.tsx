@@ -27,7 +27,7 @@ const PlayGround = ({ session, setSession }: any) => {
 
     const fetchSession = ({ id }: { id: any }) => {
         const token = cookies?.access;
-        fetch(`http://localhost/api/session/?id=${id}`, {
+        fetch(`session/?id=${id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

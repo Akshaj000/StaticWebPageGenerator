@@ -1,0 +1,33 @@
+# backend
+backend/.env
+backend/.idea
+
+# frontend
+frontend/node_modules
+frontend/.idea
+frontend/.pnp
+frontend/.pnp.js
+frontend/coverage
+frontend/.next/
+frontend/out/
+frontend/build
+
+# misc
+frontend/.DS_Store
+frontend/.pem
+
+# debug
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# local env files
+frontend.env.local
+
+# vercel
+frontend/.vercel
+
+# typescript
+frontend/.tsbuildinfo
+frontend/next-env.d.ts
+

@@ -13,8 +13,6 @@ The webapp can generate static website using HTML, CSS and JS based on user spec
 7) If the user does'nt want to deploy then a preview is shown to the user.
 
 
-The app is not production ready, might find it hard to run locally aswell. Also there will console.log and localhost here and there. I will fix it in few days.
-
 ![Screenshot from 2023-08-02 18-27-16](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/e0d3a246-6c75-4d02-9daa-d8de643c466f)
 ![Screenshot from 2023-08-02 18-26-33](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/312b6141-c953-43e7-ae35-0ed732d0b906)
 ![Screenshot from 2023-08-02 18-25-49](https://github.com/Akshaj000/StaticWebPageGenerator/assets/83636572/dd1b345b-6e18-4d47-89df-dc9ea0ba8c2a)

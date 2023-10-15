@@ -2,31 +2,33 @@ from django.contrib import admin
 from django.urls import path
 
 from user.views import (
-    MeView, UserRegisterView, UserLoginView, UserLogoutView, UpdateUserView
+    me_view, update_user_view, user_logout_view, user_login_view, authenticate_google_view
 )
 from llm.views import (
-    GetSessionsView, CreateSessionView, UpdateSessionView,
-    DeleteSessionView, GetSessionView, GenerateWebPageView,
-    PublishWebPageView, DeleteDeployedWebPageView, RegenerateWebPageView, UpdateContentView
+    get_session_view, update_session_view, delete_session_view, create_session_view,
+    get_sessions_view, update_content_view, delete_deployed_webpage_view, publish_webpage_view,
+    regenerate_webpage_view, generate_webpage_view
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/me/', MeView.as_view(), name='me'),
-    path('api/login/', UserLoginView.as_view(), name='login'),
-    path('api/logout/', UserLogoutView.as_view(), name='logout'),
-    path('api/register/', UserRegisterView.as_view(), name='register'),
-    path('api/me/update/', UpdateUserView.as_view(), name='update'),
+    path('api/admin/', admin.site.urls),
 
-    path('api/sessions/', GetSessionsView.as_view(), name='get-session'),
-    path('api/session/', GetSessionView.as_view(), name='get-session'),
-    path('api/session/create/', CreateSessionView.as_view(), name='create-session'),
-    path('api/session/update/', UpdateSessionView.as_view(), name='update-session'),
-    path('api/session/delete/', DeleteSessionView.as_view(), name='delete-session'),
+    # User
+    path('api/auth/google/', authenticate_google_view),
+    path('api/user/login/', user_login_view),
+    path('api/user/logout/', user_logout_view),
+    path('api/me/', me_view),
+    path('api/me/update/', update_user_view),
 
-    path('api/webpage/update-content/', UpdateContentView.as_view(), name='update-content'),
-    path('api/webpage/generate/', GenerateWebPageView.as_view(), name='generate-webpage'),
-    path('api/webpage/regenerate/', RegenerateWebPageView.as_view(), name='regenerate-webpage'),
-    path('api/webpage/publish/', PublishWebPageView.as_view(), name='publish-webpage'),
-    path('api/webpage/delete-deployment/', DeleteDeployedWebPageView.as_view(), name='delete-deployed-webpage'),
+    path('api/sessions/', get_sessions_view, name='get-session'),
+    path('api/session/', get_session_view, name='get-session'),
+    path('api/session/create/', create_session_view, name='create-session'),
+    path('api/session/update/', update_session_view, name='update-session'),
+    path('api/session/delete/', delete_session_view, name='delete-session'),
+
+    path('api/webpage/update-content/', update_content_view, name='update-content'),
+    path('api/webpage/generate/', generate_webpage_view, name='generate-webpage'),
+    path('api/webpage/regenerate/', regenerate_webpage_view, name='regenerate-webpage'),
+    path('api/webpage/publish/', publish_webpage_view, name='publish-webpage'),
+    path('api/webpage/delete-deployment/', delete_deployed_webpage_view, name='delete-deployed-webpage'),
 ]

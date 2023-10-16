@@ -1,11 +1,10 @@
-import { useCookies } from "react-cookie";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import CodeContainer from "@/app/home/Dashboard/PlayGround/CodeContainer";
 import Link from "next/link";
+import clientFetcher from "@/app/clientFetcher";
 
 const PlayGround = ({ session, setSession }: any) => {
-    const [cookies] = useCookies(["access"]);
 
     const setState = (state: any) => {
         setSession((prevSession: any) => {
@@ -25,31 +24,11 @@ const PlayGround = ({ session, setSession }: any) => {
     };
 
 
-    const fetchSession = ({ id }: { id: any }) => {
-        const token = cookies?.access;
-        fetch(`session/?id=${id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            }
-        })
-            .then((response) => {
-                if (response.status === 200) {
-                    return response.json(); // Return the response JSON
-                } else {
-                    return null;
-                }
-            })
-            .then((data) => {
-                if (data) {
-                    // Assuming you have a function to handle the session data
-                    handleSessionData(data);
-                }
-            })
-            .catch((error) => {
-                console.error("Fetch error:", error);
-            });
+    const fetchSession = async ({id}: { id: any }) => {
+        const response = await clientFetcher(`session/?id=${id}`)
+        if (response?.data) {
+            handleSessionData(response.data);
+        }
     };
 
     useEffect(() => {
@@ -76,13 +55,11 @@ const PlayGround = ({ session, setSession }: any) => {
     }, [session?.webpage?.state]);
 
 
-    const handleRegenerate = () => {
-        const token = cookies?.access;
-        fetch(`http://localhost/api/webpage/regenerate/`, {
+    const handleRegenerate = async () => {
+        const response = await clientFetcher(`webpage/regenerate`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 topic: session?.webpage?.topic,
@@ -91,28 +68,24 @@ const PlayGround = ({ session, setSession }: any) => {
                 sessionID: session?.id,
             }),
         })
-        .then((response) => {
-            if (response.status === 200) {
-                toast.success("Website is being regenerated");
-                setState("GENERATING");
-            } else {
-                toast.error("Error regenerating website");
-                return null;
-            }
-        })
-    }
+        if (response?.status === 200) {
+            toast.success("Website is being regenerated");
+            setState("GENERATING");
+        } else {
+            toast.error("Error regenerating website");
+            return null;
+        }
+    };
 
-    const handleGenerate = () => {
+    const handleGenerate = async () => {
         if (session?.webpage?.state) {
             handleRegenerate();
             return;
         }
-        const token = cookies?.access;
-        fetch(`http://localhost/api/webpage/generate/`, {
+        const response = await clientFetcher(`webpage/generate`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 topic: session?.webpage?.topic,
@@ -121,65 +94,52 @@ const PlayGround = ({ session, setSession }: any) => {
                 sessionID: session?.id,
             }),
         })
-        .then((response) => {
-            if (response.status === 200) {
-                toast.success("Website is being generated");
-                setState("GENERATING");
-            } else {
-                toast.error("Error generating website");
-                return null;
-            }
-        })
+        if (response?.status === 200) {
+            toast.success("Website is being generated");
+            setState("GENERATING");
+        }
     };
 
-    const handlePublish = () => {
-        const token = cookies?.access;
-        fetch(`http://localhost/api/webpage/publish/`, {
+    const handlePublish = async () => {
+        const response = await clientFetcher(`webpage/publish`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 sessionID: session?.id,
             }),
         })
-        .then((response) => {
-            if (response.status === 200) {
-                toast.success("Website is being published");
-                setState("PUBLISHING");
-                setSession({ ...session, webpage: { ...session.webpage, hostOnGithub: true } })
-            } else {
-                toast.error("Error publishing website");
-                return null;
-            }
-        })
+        if (response?.status === 200) {
+            toast.success("Website is being published");
+            setState("PUBLISHING");
+            setSession({...session, webpage: {...session.webpage, hostOnGithub: true}})
+        } else {
+            toast.error("Error publishing website");
+            return null;
+        }
     }
 
 
-    const handleDeleteDeployment = () => {
+    const handleDeleteDeployment = async () => {
         setState("PUBLISHING")
-        const token = cookies?.access;
-        fetch(`http://localhost/api/webpage/delete-deployment/`, {
+        const response = await clientFetcher(`webpage/delete-deployment`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 sessionID: session?.id,
             }),
         })
-        .then((response) => {
-            if (response.status === 200) {
-                toast.success("Website is being deleted");
-                setState("GENERATED");
-                setSession({ ...session, webpage: { ...session.webpage, hostOnGithub: false } })
-            } else {
-                toast.error("Error deleting website");
-                return null;
-            }
-        })
+        if (response?.status === 200) {
+            toast.success("Website is being deleted");
+            setState("GENERATED");
+            setSession({...session, webpage: {...session.webpage, hostOnGithub: false}})
+        } else {
+            toast.error("Error deleting website");
+            return null;
+        }
     }
 
 

@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Prism from 'prismjs';
-import {useCookies} from "react-cookie";
 import {toast} from "react-toastify";
+import clientFetcher from "@/app/clientFetcher";
 
 const CodeContainer = ({ session, setState }: any) => {
-    const [cookies] = useCookies(["access"]);
 
     const [editableHtml, setEditableHtml] = useState(session?.webpage?.html || '');
     const [editableCss, setEditableCss] = useState(session?.webpage?.css || '');
@@ -92,13 +91,11 @@ const CodeContainer = ({ session, setState }: any) => {
         applySyntaxHighlighting();
     }, []);
 
-    const handleUpdateContent = () => {
-        const token = cookies?.access;
-        fetch(`http://localhost/api/webpage/update-content/`, {
+    const handleUpdateContent = async () => {
+        const response = await clientFetcher(`webpage/update-content`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 htmlContent: editableHtml,
@@ -107,17 +104,13 @@ const CodeContainer = ({ session, setState }: any) => {
                 sessionID: session?.id,
                 publish: shouldPublish
             }),
-        }).then((response) => {
-            if (response.status === 200) {
-                setState("PUBLISHING")
-                toast.success("Successfully updated content!");
-            } else {
-                toast.error("Failed to update content!");
-            }
-        }).catch((error) => {
-            console.error(error);
-            toast.error("Failed to update content!");
         })
+        if (response.status === 200) {
+            setState("PUBLISHING")
+            toast.success('Successfully updated content!');
+        } else {
+            toast.error('Failed to update content!');
+        }
     }
 
     return (

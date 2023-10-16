@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Trash2, Edit2, Plus } from 'react-feather';
+import { Trash2, Edit2 } from 'react-feather';
 import {toast} from "react-toastify";
-import {useCookies} from "react-cookie";
+import clientFetcher from "@/app/clientFetcher";
 interface Session {
     id: number;
     name: string;
@@ -13,80 +13,61 @@ const SessionList = ({ sessions: initialSessions, currentSession, setCurrentSess
     const [sessions, setSessions] = useState<Session[]>(initialSessions || []);
     const [editingSessionId, setEditingSessionId] = useState<number | null>(null);
     const [editingSessionTitle, setEditingSessionTitle] = useState('');
-    const [cookies] = useCookies(['access']);
 
-    const fetchSession = ({ session }: { session: any }) => {
-        const token = cookies?.access;
-        fetch(`http://localhost/api/session/?id=${session?.id}`, {
+    const fetchSession = async ({session}: { session: any }) => {
+        const response = await clientFetcher(`session/?id=${session?.id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
             }
         })
-            .then((response) => {
-            if (response.status === 200) {
-                return response.json(); // Return the response JSON
-            } else {
-                return null;
-            }
-        })
-            .then((data) => {
-                if (data) {
-                    setCurrentSession(data);
-                }
-            })
-            .catch((error) => {
-                console.error("Fetch error:", error);
-            });
+        if (response.status === 200) {
+            setCurrentSession(response.data)
+        } else {
+            toast.error('Error fetching session');
+        }
     };
 
-    const handleDelete = (id: number) => {
-        const token = cookies?.access
-        fetch(`http://localhost/api/session/delete/`, {
+    const handleDelete = async (id: number) => {
+        const response = await clientFetcher(`session/delete`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 id: id
             }),
-        }).then((response) => {
-            if (response.status === 200) {
-                setSessions(sessions.filter((session) => session.id !== id));
-                setCurrentSession(null);
-            } else {
-                toast.error('Error deleting session');
-            }
         })
+        if (response.status === 200) {
+            setSessions(sessions.filter((session) => session.id !== id));
+            setCurrentSession(null);
+        } else {
+            toast.error('Error deleting session');
+        }
     };
 
-    const handleEdit = (id: number, newTitle: string) => {
-        const token = cookies?.access
-        fetch(`http://localhost/api/session/update/`, {
+    const handleEdit = async (id: number, newTitle: string) => {
+        const response = await clientFetcher(`session/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 name: newTitle.trim(),
                 id: id
             }),
-        }).then((response) => {
-            if (response.status === 200) {
-                const updatedSessions = sessions.map((session) => {
-                    if (session.id === id) {
-                        return { ...session, name: newTitle };
-                    }
-                    return session;
-                });
-                setSessions(updatedSessions);
-            } else {
-                toast.error('Error updating session');
-            }
         })
+        if (response.status === 200) {
+            const updatedSessions = sessions.map((session) => {
+                if (session.id === id) {
+                    return {...session, name: newTitle};
+                }
+                return session;
+            });
+            setSessions(updatedSessions);
+        } else {
+            toast.error('Error updating session');
+        }
     };
 
     const handleNewSession = (data: any) =>{
@@ -99,17 +80,16 @@ const SessionList = ({ sessions: initialSessions, currentSession, setCurrentSess
     }
 
     const handleAddSession = async () => {
-        const token = cookies?.access
-        fetch(`http://localhost/api/session/create/`, {
+        const response =  await clientFetcher(`session/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({name: "New Session"}),
-        }).then((body) => body.json()).then((data) => {
-            handleNewSession(data)
         })
+        if (response.status === 200 && response?.data) {
+            handleNewSession(response.data)
+        }
     };
 
     const handleSessionChange = (session: Session) => {

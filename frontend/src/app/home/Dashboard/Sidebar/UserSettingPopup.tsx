@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import {toast} from "react-toastify";
-import {useCookies} from "react-cookie";
+import clientFetcher from "@/app/clientFetcher";
 
 const UserSettingsPopup = ({ user, showModal: _show }: any) => {
     const [userSettings, setUserSettings] = useState(user);
     const [showModal, setShowModal] = useState(_show || false);
-    const [cookies] = useCookies(['access']);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -27,13 +26,11 @@ const UserSettingsPopup = ({ user, showModal: _show }: any) => {
         }
     };
 
-    const handleUpdate = () => {
-        const token = cookies?.access
-        fetch(`http://localhost/api/me/update/`, {
+    const handleUpdate = async () => {
+        const response = await clientFetcher(`me/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
                 name: userSettings.name,
@@ -41,14 +38,13 @@ const UserSettingsPopup = ({ user, showModal: _show }: any) => {
                 githubToken: userSettings.githubToken,
                 openAIKey: userSettings.openAIKey,
             }),
-        }).then((response) => {
-            if (response.status === 200) {
-                toast.success('User settings updated');
-                toggleModal();
-            } else {
-                toast.error('Error updating user settings');
-            }
         })
+        if (response.status === 200) {
+            toast.success('User settings updated');
+            toggleModal();
+        } else {
+            toast.error('Error updating user settings');
+        }
     }
 
     const toggleModal = () => {
